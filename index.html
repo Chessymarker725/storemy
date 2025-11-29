@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vyrionyx Rank Store</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top, #000d14, black 85%);
+    color: white;
+    margin: 0;
+    overflow-x: hidden;
+}
+.glow {
+    text-shadow: 0 0 15px #fff, 0 0 40px #00f2ff, 0 0 90px #00f2ff;
+}
+.btn-glow:hover {
+    box-shadow: 0 0 20px cyan, 0 0 60px cyan;
+    transform: translateY(-3px);
+    transition: 0.3s;
+}
+.card3d {
+    transform: perspective(700px);
+}
+.card3d:hover {
+    transform: perspective(700px) rotateX(5deg) rotateY(-5deg) scale(1.06);
+    box-shadow: 0 0 25px cyan, 0 0 70px cyan;
+    transition: 0.4s;
+}
+.popup {
+    background: linear-gradient(145deg, #00141a, #002a36);
+    border: 2px solid cyan;
+    box-shadow: 0 0 20px cyan, 0 0 70px #00f2ff;
+}
+@keyframes float {0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);} }
+.float { animation: float 3s ease-in-out infinite; }
+.rocket-logo { filter: drop-shadow(0 0 12px cyan) drop-shadow(0 0 40px #00faff); }
+</style>
+</head>
+<body>
+
+<!-- Particle Background -->
+<canvas id="particles" class="fixed inset-0 z-0"></canvas>
+
+<script>
+// Particle animation
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+for (let i = 0; i < 140; i++) {
+    particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2.2 + 0.3,
+        d: Math.random() * 1.5 + 0.2
+    });
+}
+
+function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for (let p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+        p.y += p.d;
+        if (p.y > canvas.height) p.y = 0;
+    }
+    requestAnimationFrame(draw);
+}
+
+draw();
+window.addEventListener("resize", ()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+
+<!-- Sound Effect -->
+<audio id="hoverSound" src="data:audio/wav;base64,UklGRjQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoAAAAA"></audio>
+<script>
+function playHover(){
+  const audio = document.getElementById("hoverSound");
+  audio.currentTime = 0;
+  audio.play();
+}
+</script>
+
+<!-- Navbar -->
+<nav class="relative z-10 w-full flex items-center justify-between px-8 py-6 bg-black/30 backdrop-blur-xl border-b border-cyan-500/20">
+    <a href="#" class="flex items-center gap-3">
+        <svg class="w-12 h-12 rocket-logo float" viewBox="0 0 24 24" fill="cyan">
+            <path d="M4 16s2-5 6-6l2 2c-1 4-6 6-6 6z"/>
+            <path d="M12 2s7-1 9 1 0 8 0 8-4 10-12 12l-4-4C7 6 12 2 12 2z"/>
+            <circle cx="17.5" cy="6.5" r="1.5"/>
+            <path d="M5 14l5 5-3 3-2-2 1-2-2-2-2 1-2-2z"/>
+        </svg>
+        <span class="text-xl font-bold text-cyan-300" style="font-family:'Orbitron'">Vyrionyx</span>
+    </a>
+    <a href="#ranks" class="px-6 py-2 bg-cyan-400 text-black font-bold rounded-xl btn-glow" onmouseover="playHover()">Ranks</a>
+</nav>
+
+<!-- Hero Section -->
+<section class="relative z-10 flex flex-col items-center mt-28 text-center px-5">
+    <p class="text-cyan-400 text-2xl font-bold mb-4">IP SERVER</p>
+    <p class="text-cyan-300 text-xl mb-6">play.vyrionyx.biz.id</p>
+
+    <h2 class="text-7xl font-extrabold glow mb-6 float" style="font-family:'Orbitron'">VYRIONYX</h2>
+    <p class="text-gray-400 text-sm opacity-80 mt-1">vyrionyx.biz.id</p>
+
+    <p class="text-gray-300 text-lg max-w-2xl mb-10 mt-8">Premium Ranks for Minecraft Server — Fast Process via WhatsApp</p>
+
+    <button onclick="location.href='#ranks'" 
+    class="px-14 py-6 bg-gradient-to-r from-cyan-400 to-blue-600 text-black font-extrabold rounded-2xl text-3xl shadow-xl btn-glow" onmouseover="playHover()">
+    LIHAT RANK 🚀
+    </button>
+</section>
+
+<!-- Rank List -->
+<section id="ranks" class="relative z-10 mt-40 w-full max-w-5xl px-6">
+  <h2 class="text-center text-5xl font-extrabold glow mb-14" style="font-family:'Orbitron'">AVAILABLE RANKS</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12" id="rankContainer"></div>
+</section>
+
+<!-- Popup -->
+<div id="rankPopup" class="fixed inset-0 bg-black/80 flex items-center justify-center hidden z-50">
+  <div class="popup p-7 rounded-2xl w-96 text-center">
+    <h2 class="text-3xl font-extrabold glow mb-3" style="font-family:'Orbitron'">CONFIRM BUY</h2>
+    <p class="text-gray-400">Selected Rank:</p>
+    <h3 id="rankName" class="text-2xl font-bold text-cyan-400 my-4"></h3>
+    <input id="rankInput" class="hidden">
+    <input id="userInput" type="text" placeholder="Minecraft Name" class="w-full p-3 text-center bg-gray-900 border border-cyan-400 rounded-xl outline-none">
+    <button onclick="buyRank()" class="mt-6 px-6 py-3 bg-cyan-400 text-black font-bold rounded-xl btn-glow w-full" onmouseover="playHover()">BUY NOW</button>
+    <button onclick="closePopup()" class="mt-2 text-gray-400 hover:underline" onmouseover="playHover()">Cancel</button>
+  </div>
+</div>
+
+<!-- Rank Script -->
+<script>
+const waAdmin = "628317071553";
+const ranks = [
+  {name:"VIP",price:10000},
+  {name:"VIP+",price:20000},
+  {name:"MVP",price:30000},
+  {name:"MVP+",price:40000},
+  {name:"MVP++",price:50000},
+  {name:"ZOMBIE",price:60000},
+  {name:"ULTIMATE",price:70000},
+  {name:"GOD",price:80000},
+  {name:"VOID",price:90000}
+];
+
+ranks.forEach(r=>{
+  const card = document.createElement("div");
+  card.className = "rank-card bg-gray-800/25 card3d p-6 rounded-2xl text-center border border-cyan-500/10 backdrop-blur-lg";
+  card.innerHTML = `
+    <h2 class="text-2xl font-extrabold text-cyan-300" style="font-family:'Orbitron'">${r.name}</h2>
+    <p class="text-xl font-bold mt-3 text-white">Rp ${r.price.toLocaleString("id-ID")}</p>
+    <button onclick='openPopup("${r.name}")' class="mt-6 px-5 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-bold rounded-xl btn-glow w-full" onmouseover="playHover()">BELI</button>
+  `;
+  document.getElementById("rankContainer").appendChild(card);
+});
+
+function openPopup(rank){
+  document.getElementById("rankName").innerText = rank;
+  document.getElementById("rankInput").value = rank;
+  document.getElementById("rankPopup").classList.remove("hidden");
+}
+
+function closePopup(){
+  document.getElementById("rankPopup").classList.add("hidden");
+}
+
+function buyRank(){
+  const rank = document.getElementById("rankInput").value;
+  const user = document.getElementById("userInput").value.trim();
+  if(!user){
+    alert("Masukin nama MC lu dulu!");
+    return;
+  }
+  const msg = `Halo bang, saya mau beli rank *${rank}*. Nama MC: ${user}`;
+  window.open(`https://wa.me/${waAdmin}?text=${encodeURIComponent(msg)}`);
+}
+</script>
+
+<!-- Footer -->
+<footer id="footer" class="relative z-10 mt-40 text-center text-gray-500 pb-10 text-xs">
+  © 2025 Vyrionyx Rank Store — Mewah No Lawan
+</footer>
+
+</body>
+</html>
